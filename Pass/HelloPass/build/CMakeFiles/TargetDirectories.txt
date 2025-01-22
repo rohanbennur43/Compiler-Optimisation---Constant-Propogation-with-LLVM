@@ -1,0 +1,6 @@
+/home/ubuntu/rohan/CS201-F24-Template/Pass/HelloPass/build/CMakeFiles/intrinsics_gen.dir
+/home/ubuntu/rohan/CS201-F24-Template/Pass/HelloPass/build/CMakeFiles/omp_gen.dir
+/home/ubuntu/rohan/CS201-F24-Template/Pass/HelloPass/build/CMakeFiles/acc_gen.dir
+/home/ubuntu/rohan/CS201-F24-Template/Pass/HelloPass/build/CMakeFiles/HelloPass.dir
+/home/ubuntu/rohan/CS201-F24-Template/Pass/HelloPass/build/CMakeFiles/edit_cache.dir
+/home/ubuntu/rohan/CS201-F24-Template/Pass/HelloPass/build/CMakeFiles/rebuild_cache.dir

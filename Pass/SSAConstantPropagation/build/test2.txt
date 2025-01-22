@@ -1,0 +1,862 @@
+--------------entry0x1924040-----------
+0x18cefc0 --   %cmp = icmp ne i32 1, 2
+0x1924a00 --   br i1 %cmp, label %if.then, label %if.else
+--------------if.then0x1924860-----------
+0x18cf0e0 --   %add = add nsw i32 2, 1
+0x1924b00 --   br label %if.end
+--------------if.else0x19248d0-----------
+0x18d03d0 --   %sub = sub nsw i32 2, 1
+0x1924b90 --   br label %if.end
+--------------if.end0x1924a70-----------
+0x1924be8 --   %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ]
+0x1924ce0 --   br label %do.body
+--------------do.body0x1924c50-----------
+0x1924e58 --   %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ]
+0x18d04f0 --   %cmp1 = icmp slt i32 %z.0, 0
+0x1925330 --   br i1 %cmp1, label %if.then2, label %if.else4
+--------------if.then20x1924f70-----------
+0x18d0610 --   %add3 = add nsw i32 %z.0, 1
+0x1925430 --   br label %if.end6
+--------------if.else40x19251f0-----------
+0x18d0730 --   %sub5 = sub nsw i32 %z.0, 1
+0x19254c0 --   br label %if.end6
+--------------if.end60x19253a0-----------
+0x1925550 --   %sub7 = sub nsw i32 %b.0, 1
+0x19255c0 --   br label %do.cond
+--------------do.cond0x1924d80-----------
+0x1925650 --   %cmp8 = icmp sge i32 %sub7, 0
+0x1925790 --   br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6
+--------------do.end0x19256c0-----------
+0x1926310 --   ret void
+
+
+-----------FLow Worklist queue---------------entry
+Inside VisitExpression
+entry:
+  %cmp = icmp ne i32 1, 2
+  br i1 %cmp, label %if.then, label %if.else
+
+Condition value is1
+Adding True block: if.then to the queue.
+0
+After Flow worklist ----------------------
+  %cmp = icmp ne i32 1, 2 2147483647
+  %add = add nsw i32 2, 1 2147483647
+  %sub = sub nsw i32 2, 1 2147483647
+  %cmp1 = icmp slt i32 %z.0, 0 2147483647
+  %add3 = add nsw i32 %z.0, 1 2147483647
+  %sub5 = sub nsw i32 %z.0, 1 2147483647
+  br i1 %cmp, label %if.then, label %if.else 2147483647
+  br label %if.end 2147483647
+  br label %if.end 2147483647
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ] 2147483647
+  br label %do.body 2147483647
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ] 2147483647
+  br i1 %cmp1, label %if.then2, label %if.else4 2147483647
+  br label %if.end6 2147483647
+  br label %if.end6 2147483647
+  %sub7 = sub nsw i32 %b.0, 1 2147483647
+  br label %do.cond 2147483647
+  %cmp8 = icmp sge i32 %sub7, 0 2147483647
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6 2147483647
+  ret void 2147483647
+-----------FLow Worklist queue---------------entry if.then
+Inside VisitExpression
+if.then:                                          ; preds = %entry
+  %add = add nsw i32 2, 1
+  br label %if.end
+
+  %add = add nsw i32 2, 1--------val before assignment is2147483647
+  %add = add nsw i32 2, 1--------val is3
+Adding entry in SSA Worklist   %add = add nsw i32 2, 1-  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ]
+After visit expression  %add = add nsw i32 2, 1 i32 2-2 i32 1-1
+Inside a non conditional instruction in visit phi
+0
+After Flow worklist ----------------------
+  %cmp = icmp ne i32 1, 2 2147483647
+  %add = add nsw i32 2, 1 3
+  %sub = sub nsw i32 2, 1 2147483647
+  %cmp1 = icmp slt i32 %z.0, 0 2147483647
+  %add3 = add nsw i32 %z.0, 1 2147483647
+  %sub5 = sub nsw i32 %z.0, 1 2147483647
+  br i1 %cmp, label %if.then, label %if.else 2147483647
+  br label %if.end 2147483647
+  br label %if.end 2147483647
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ] 2147483647
+  br label %do.body 2147483647
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ] 2147483647
+  br i1 %cmp1, label %if.then2, label %if.else4 2147483647
+  br label %if.end6 2147483647
+  br label %if.end6 2147483647
+  %sub7 = sub nsw i32 %b.0, 1 2147483647
+  br label %do.cond 2147483647
+  %cmp8 = icmp sge i32 %sub7, 0 2147483647
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6 2147483647
+  ret void 2147483647
+-----------FLow Worklist queue---------------if.then if.end
+Phi instruction  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ]
+Top and dest are0x1924860 0x1924a70 1
+0x1924860Inside Visit phi
+0x1924a70Inside Visit phi
+This is visited here  %add = add nsw i32 2, 1if.then----if.end
+Top and dest are0x19248d0 0x1924a70 0
+0x19248d0Inside Visit phi
+Not visited here  %sub = sub nsw i32 2, 1
+Found a PHI node:   %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ]
+Adding entry in SSA Worklist from visit phi   %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ]-  %sub5 = sub nsw i32 %z.0, 1
+Adding entry in SSA Worklist from visit phi   %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ]-  %add3 = add nsw i32 %z.0, 1
+Adding entry in SSA Worklist from visit phi   %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ]-  %cmp1 = icmp slt i32 %z.0, 0
+Value of operand1 in visit phi  %add = add nsw i32 2, 1 3
+Value of operand2 in visit phi  %sub = sub nsw i32 2, 1 2147483647
+The ins to constant value is  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ]->3
+Inside VisitExpression
+if.end:                                           ; preds = %if.else, %if.then
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ]
+  br label %do.body
+
+Inside a non conditional instruction in visit phi
+0
+After Flow worklist ----------------------
+  %cmp = icmp ne i32 1, 2 2147483647
+  %add = add nsw i32 2, 1 3
+  %sub = sub nsw i32 2, 1 2147483647
+  %cmp1 = icmp slt i32 %z.0, 0 2147483647
+  %add3 = add nsw i32 %z.0, 1 2147483647
+  %sub5 = sub nsw i32 %z.0, 1 2147483647
+  br i1 %cmp, label %if.then, label %if.else 2147483647
+  br label %if.end 2147483647
+  br label %if.end 2147483647
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ] 3
+  br label %do.body 2147483647
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ] 2147483647
+  br i1 %cmp1, label %if.then2, label %if.else4 2147483647
+  br label %if.end6 2147483647
+  br label %if.end6 2147483647
+  %sub7 = sub nsw i32 %b.0, 1 2147483647
+  br label %do.cond 2147483647
+  %cmp8 = icmp sge i32 %sub7, 0 2147483647
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6 2147483647
+  ret void 2147483647
+-----------FLow Worklist queue---------------if.end do.body
+Phi instruction  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ]
+Top and dest are0x19253a0 0x1924c50 0
+0x19253a0Inside Visit phi
+Not visited here  %sub7 = sub nsw i32 %b.0, 1
+Found a PHI node:   %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ]
+Adding entry in SSA Worklist from visit phi   %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ]-  %sub7 = sub nsw i32 %b.0, 1
+Value of operand1 in visit phii32 2 2
+Value of operand2 in visit phi  %sub7 = sub nsw i32 %b.0, 1 2147483647
+The ins to constant value is  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ]->2
+Inside VisitExpression
+do.body:                                          ; preds = %do.cond, %if.end
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ]
+  %cmp1 = icmp slt i32 %z.0, 0
+  br i1 %cmp1, label %if.then2, label %if.else4
+
+Condition value is0
+Adding False block: if.else4 to the queue.
+0
+After Flow worklist ----------------------
+  %cmp = icmp ne i32 1, 2 2147483647
+  %add = add nsw i32 2, 1 3
+  %sub = sub nsw i32 2, 1 2147483647
+  %cmp1 = icmp slt i32 %z.0, 0 2147483647
+  %add3 = add nsw i32 %z.0, 1 2147483647
+  %sub5 = sub nsw i32 %z.0, 1 2147483647
+  br i1 %cmp, label %if.then, label %if.else 2147483647
+  br label %if.end 2147483647
+  br label %if.end 2147483647
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ] 3
+  br label %do.body 2147483647
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ] 2
+  br i1 %cmp1, label %if.then2, label %if.else4 2147483647
+  br label %if.end6 2147483647
+  br label %if.end6 2147483647
+  %sub7 = sub nsw i32 %b.0, 1 2147483647
+  br label %do.cond 2147483647
+  %cmp8 = icmp sge i32 %sub7, 0 2147483647
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6 2147483647
+  ret void 2147483647
+-----------FLow Worklist queue---------------do.body if.else4
+Inside VisitExpression
+if.else4:                                         ; preds = %do.body
+  %sub5 = sub nsw i32 %z.0, 1
+  br label %if.end6
+
+  %sub5 = sub nsw i32 %z.0, 1--------val before assignment is2147483647
+  %sub5 = sub nsw i32 %z.0, 1--------val is2
+After visit expression  %sub5 = sub nsw i32 %z.0, 1   %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ]-3 i32 1-1
+Inside a non conditional instruction in visit phi
+0
+After Flow worklist ----------------------
+  %cmp = icmp ne i32 1, 2 2147483647
+  %add = add nsw i32 2, 1 3
+  %sub = sub nsw i32 2, 1 2147483647
+  %cmp1 = icmp slt i32 %z.0, 0 2147483647
+  %add3 = add nsw i32 %z.0, 1 2147483647
+  %sub5 = sub nsw i32 %z.0, 1 2
+  br i1 %cmp, label %if.then, label %if.else 2147483647
+  br label %if.end 2147483647
+  br label %if.end 2147483647
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ] 3
+  br label %do.body 2147483647
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ] 2
+  br i1 %cmp1, label %if.then2, label %if.else4 2147483647
+  br label %if.end6 2147483647
+  br label %if.end6 2147483647
+  %sub7 = sub nsw i32 %b.0, 1 2147483647
+  br label %do.cond 2147483647
+  %cmp8 = icmp sge i32 %sub7, 0 2147483647
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6 2147483647
+  ret void 2147483647
+-----------FLow Worklist queue---------------if.else4 if.end6
+Inside VisitExpression
+if.end6:                                          ; preds = %if.else4, %if.then2
+  %sub7 = sub nsw i32 %b.0, 1
+  br label %do.cond
+
+  %sub7 = sub nsw i32 %b.0, 1--------val before assignment is2147483647
+  %sub7 = sub nsw i32 %b.0, 1--------val is1
+Adding entry in SSA Worklist   %sub7 = sub nsw i32 %b.0, 1-  %cmp8 = icmp sge i32 %sub7, 0
+Adding entry in SSA Worklist   %sub7 = sub nsw i32 %b.0, 1-  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ]
+After visit expression  %sub7 = sub nsw i32 %b.0, 1   %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ]-2 i32 1-1
+Inside a non conditional instruction in visit phi
+0
+After Flow worklist ----------------------
+  %cmp = icmp ne i32 1, 2 2147483647
+  %add = add nsw i32 2, 1 3
+  %sub = sub nsw i32 2, 1 2147483647
+  %cmp1 = icmp slt i32 %z.0, 0 2147483647
+  %add3 = add nsw i32 %z.0, 1 2147483647
+  %sub5 = sub nsw i32 %z.0, 1 2
+  br i1 %cmp, label %if.then, label %if.else 2147483647
+  br label %if.end 2147483647
+  br label %if.end 2147483647
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ] 3
+  br label %do.body 2147483647
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ] 2
+  br i1 %cmp1, label %if.then2, label %if.else4 2147483647
+  br label %if.end6 2147483647
+  br label %if.end6 2147483647
+  %sub7 = sub nsw i32 %b.0, 1 1
+  br label %do.cond 2147483647
+  %cmp8 = icmp sge i32 %sub7, 0 2147483647
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6 2147483647
+  ret void 2147483647
+-----------FLow Worklist queue---------------if.end6 do.cond
+Inside VisitExpression
+do.cond:                                          ; preds = %if.end6
+  %cmp8 = icmp sge i32 %sub7, 0
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6
+
+Condition value is1
+Adding True block: do.body to the queue.
+0
+After Flow worklist ----------------------
+  %cmp = icmp ne i32 1, 2 2147483647
+  %add = add nsw i32 2, 1 3
+  %sub = sub nsw i32 2, 1 2147483647
+  %cmp1 = icmp slt i32 %z.0, 0 2147483647
+  %add3 = add nsw i32 %z.0, 1 2147483647
+  %sub5 = sub nsw i32 %z.0, 1 2
+  br i1 %cmp, label %if.then, label %if.else 2147483647
+  br label %if.end 2147483647
+  br label %if.end 2147483647
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ] 3
+  br label %do.body 2147483647
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ] 2
+  br i1 %cmp1, label %if.then2, label %if.else4 2147483647
+  br label %if.end6 2147483647
+  br label %if.end6 2147483647
+  %sub7 = sub nsw i32 %b.0, 1 1
+  br label %do.cond 2147483647
+  %cmp8 = icmp sge i32 %sub7, 0 2147483647
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6 2147483647
+  ret void 2147483647
+-----------FLow Worklist queue---------------do.cond do.body
+Phi instruction  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ]
+Top and dest are0x19253a0 0x1924c50 0
+0x19253a0Inside Visit phi
+0x1924d80Inside Visit phi
+0x1924c50Inside Visit phi
+This is visited here  %sub7 = sub nsw i32 %b.0, 1if.end6----do.body
+Found a PHI node:   %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ]
+Adding entry in SSA Worklist from visit phi   %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ]-  %sub7 = sub nsw i32 %b.0, 1
+Value of operand1 in visit phii32 2 2
+Value of operand2 in visit phi  %sub7 = sub nsw i32 %b.0, 1 1
+The ins to constant value is  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ]->-2147483648
+Inside VisitExpression
+do.body:                                          ; preds = %do.cond, %if.end
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ]
+  %cmp1 = icmp slt i32 %z.0, 0
+  br i1 %cmp1, label %if.then2, label %if.else4
+
+Condition value is0
+Adding False block: if.else4 to the queue.
+0
+After Flow worklist ----------------------
+  %cmp = icmp ne i32 1, 2 2147483647
+  %add = add nsw i32 2, 1 3
+  %sub = sub nsw i32 2, 1 2147483647
+  %cmp1 = icmp slt i32 %z.0, 0 2147483647
+  %add3 = add nsw i32 %z.0, 1 2147483647
+  %sub5 = sub nsw i32 %z.0, 1 2
+  br i1 %cmp, label %if.then, label %if.else 2147483647
+  br label %if.end 2147483647
+  br label %if.end 2147483647
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ] 3
+  br label %do.body 2147483647
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ] -2147483648
+  br i1 %cmp1, label %if.then2, label %if.else4 2147483647
+  br label %if.end6 2147483647
+  br label %if.end6 2147483647
+  %sub7 = sub nsw i32 %b.0, 1 1
+  br label %do.cond 2147483647
+  %cmp8 = icmp sge i32 %sub7, 0 2147483647
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6 2147483647
+  ret void 2147483647
+-----------FLow Worklist queue---------------do.body if.else4
+After Flow worklist ----------------------
+  %cmp = icmp ne i32 1, 2 2147483647
+  %add = add nsw i32 2, 1 3
+  %sub = sub nsw i32 2, 1 2147483647
+  %cmp1 = icmp slt i32 %z.0, 0 2147483647
+  %add3 = add nsw i32 %z.0, 1 2147483647
+  %sub5 = sub nsw i32 %z.0, 1 2
+  br i1 %cmp, label %if.then, label %if.else 2147483647
+  br label %if.end 2147483647
+  br label %if.end 2147483647
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ] 3
+  br label %do.body 2147483647
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ] -2147483648
+  br i1 %cmp1, label %if.then2, label %if.else4 2147483647
+  br label %if.end6 2147483647
+  br label %if.end6 2147483647
+  %sub7 = sub nsw i32 %b.0, 1 1
+  br label %do.cond 2147483647
+  %cmp8 = icmp sge i32 %sub7, 0 2147483647
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6 2147483647
+  ret void 2147483647
+-----------SSA Worklist queue---------------  %add = add nsw i32 2, 1--  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ]
+Phi instruction  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ]
+Top and dest are0x1924860 0x1924a70 1
+0x1924860Inside Visit phi
+0x1924a70Inside Visit phi
+This is visited here  %add = add nsw i32 2, 1if.then----if.end
+Top and dest are0x19248d0 0x1924a70 0
+0x19248d0Inside Visit phi
+Not visited here  %sub = sub nsw i32 2, 1
+Value of operand1 in visit phi  %add = add nsw i32 2, 1 3
+Value of operand2 in visit phi  %sub = sub nsw i32 2, 1 2147483647
+The ins to constant value is  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ]->3
+After SSA worklist ----------------------
+  %cmp = icmp ne i32 1, 2 2147483647
+  %add = add nsw i32 2, 1 3
+  %sub = sub nsw i32 2, 1 2147483647
+  %cmp1 = icmp slt i32 %z.0, 0 2147483647
+  %add3 = add nsw i32 %z.0, 1 2147483647
+  %sub5 = sub nsw i32 %z.0, 1 2
+  br i1 %cmp, label %if.then, label %if.else 2147483647
+  br label %if.end 2147483647
+  br label %if.end 2147483647
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ] 3
+  br label %do.body 2147483647
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ] -2147483648
+  br i1 %cmp1, label %if.then2, label %if.else4 2147483647
+  br label %if.end6 2147483647
+  br label %if.end6 2147483647
+  %sub7 = sub nsw i32 %b.0, 1 1
+  br label %do.cond 2147483647
+  %cmp8 = icmp sge i32 %sub7, 0 2147483647
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6 2147483647
+  ret void 2147483647
+-----------SSA Worklist queue---------------  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ]--  %sub5 = sub nsw i32 %z.0, 1
+Assignment statements destNode. Visiting expression in0x19251f0
+Inside VisitExpression
+if.else4:                                         ; preds = %do.body
+  %sub5 = sub nsw i32 %z.0, 1
+  br label %if.end6
+
+  %sub5 = sub nsw i32 %z.0, 1--------val before assignment is2
+  %sub5 = sub nsw i32 %z.0, 1--------val is2
+After visit expression  %sub5 = sub nsw i32 %z.0, 1   %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ]-3 i32 1-1
+Inside a non conditional instruction in visit phi
+0
+After SSA worklist ----------------------
+  %cmp = icmp ne i32 1, 2 2147483647
+  %add = add nsw i32 2, 1 3
+  %sub = sub nsw i32 2, 1 2147483647
+  %cmp1 = icmp slt i32 %z.0, 0 2147483647
+  %add3 = add nsw i32 %z.0, 1 2147483647
+  %sub5 = sub nsw i32 %z.0, 1 2
+  br i1 %cmp, label %if.then, label %if.else 2147483647
+  br label %if.end 2147483647
+  br label %if.end 2147483647
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ] 3
+  br label %do.body 2147483647
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ] -2147483648
+  br i1 %cmp1, label %if.then2, label %if.else4 2147483647
+  br label %if.end6 2147483647
+  br label %if.end6 2147483647
+  %sub7 = sub nsw i32 %b.0, 1 1
+  br label %do.cond 2147483647
+  %cmp8 = icmp sge i32 %sub7, 0 2147483647
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6 2147483647
+  ret void 2147483647
+-----------SSA Worklist queue---------------  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ]--  %add3 = add nsw i32 %z.0, 1
+After SSA worklist ----------------------
+  %cmp = icmp ne i32 1, 2 2147483647
+  %add = add nsw i32 2, 1 3
+  %sub = sub nsw i32 2, 1 2147483647
+  %cmp1 = icmp slt i32 %z.0, 0 2147483647
+  %add3 = add nsw i32 %z.0, 1 2147483647
+  %sub5 = sub nsw i32 %z.0, 1 2
+  br i1 %cmp, label %if.then, label %if.else 2147483647
+  br label %if.end 2147483647
+  br label %if.end 2147483647
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ] 3
+  br label %do.body 2147483647
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ] -2147483648
+  br i1 %cmp1, label %if.then2, label %if.else4 2147483647
+  br label %if.end6 2147483647
+  br label %if.end6 2147483647
+  %sub7 = sub nsw i32 %b.0, 1 1
+  br label %do.cond 2147483647
+  %cmp8 = icmp sge i32 %sub7, 0 2147483647
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6 2147483647
+  ret void 2147483647
+-----------SSA Worklist queue---------------  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ]--  %cmp1 = icmp slt i32 %z.0, 0
+Assignment statements destNode. Visiting expression in0x1924c50
+Inside VisitExpression
+do.body:                                          ; preds = %do.cond, %if.end
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ]
+  %cmp1 = icmp slt i32 %z.0, 0
+  br i1 %cmp1, label %if.then2, label %if.else4
+
+Condition value is0
+Adding False block: if.else4 to the queue.
+0
+After SSA worklist ----------------------
+  %cmp = icmp ne i32 1, 2 2147483647
+  %add = add nsw i32 2, 1 3
+  %sub = sub nsw i32 2, 1 2147483647
+  %cmp1 = icmp slt i32 %z.0, 0 2147483647
+  %add3 = add nsw i32 %z.0, 1 2147483647
+  %sub5 = sub nsw i32 %z.0, 1 2
+  br i1 %cmp, label %if.then, label %if.else 2147483647
+  br label %if.end 2147483647
+  br label %if.end 2147483647
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ] 3
+  br label %do.body 2147483647
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ] -2147483648
+  br i1 %cmp1, label %if.then2, label %if.else4 2147483647
+  br label %if.end6 2147483647
+  br label %if.end6 2147483647
+  %sub7 = sub nsw i32 %b.0, 1 1
+  br label %do.cond 2147483647
+  %cmp8 = icmp sge i32 %sub7, 0 2147483647
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6 2147483647
+  ret void 2147483647
+-----------SSA Worklist queue---------------  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ]--  %sub7 = sub nsw i32 %b.0, 1
+Assignment statements destNode. Visiting expression in0x19253a0
+Inside VisitExpression
+if.end6:                                          ; preds = %if.else4, %if.then2
+  %sub7 = sub nsw i32 %b.0, 1
+  br label %do.cond
+
+  %sub7 = sub nsw i32 %b.0, 1--------val before assignment is1
+  %sub7 = sub nsw i32 %b.0, 1--------val is-2147483648
+Adding entry in SSA Worklist   %sub7 = sub nsw i32 %b.0, 1-  %cmp8 = icmp sge i32 %sub7, 0
+Adding entry in SSA Worklist   %sub7 = sub nsw i32 %b.0, 1-  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ]
+After visit expression  %sub7 = sub nsw i32 %b.0, 1   %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ]--2147483648 i32 1-1
+Inside a non conditional instruction in visit phi
+0
+After SSA worklist ----------------------
+  %cmp = icmp ne i32 1, 2 2147483647
+  %add = add nsw i32 2, 1 3
+  %sub = sub nsw i32 2, 1 2147483647
+  %cmp1 = icmp slt i32 %z.0, 0 2147483647
+  %add3 = add nsw i32 %z.0, 1 2147483647
+  %sub5 = sub nsw i32 %z.0, 1 2
+  br i1 %cmp, label %if.then, label %if.else 2147483647
+  br label %if.end 2147483647
+  br label %if.end 2147483647
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ] 3
+  br label %do.body 2147483647
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ] -2147483648
+  br i1 %cmp1, label %if.then2, label %if.else4 2147483647
+  br label %if.end6 2147483647
+  br label %if.end6 2147483647
+  %sub7 = sub nsw i32 %b.0, 1 -2147483648
+  br label %do.cond 2147483647
+  %cmp8 = icmp sge i32 %sub7, 0 2147483647
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6 2147483647
+  ret void 2147483647
+-----------SSA Worklist queue---------------  %sub7 = sub nsw i32 %b.0, 1--  %cmp8 = icmp sge i32 %sub7, 0
+Assignment statements destNode. Visiting expression in0x1924d80
+Inside VisitExpression
+do.cond:                                          ; preds = %if.end6
+  %cmp8 = icmp sge i32 %sub7, 0
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6
+
+Condition value is2
+Adding both True and False blocks due to undefined condition.
+0
+After SSA worklist ----------------------
+  %cmp = icmp ne i32 1, 2 2147483647
+  %add = add nsw i32 2, 1 3
+  %sub = sub nsw i32 2, 1 2147483647
+  %cmp1 = icmp slt i32 %z.0, 0 2147483647
+  %add3 = add nsw i32 %z.0, 1 2147483647
+  %sub5 = sub nsw i32 %z.0, 1 2
+  br i1 %cmp, label %if.then, label %if.else 2147483647
+  br label %if.end 2147483647
+  br label %if.end 2147483647
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ] 3
+  br label %do.body 2147483647
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ] -2147483648
+  br i1 %cmp1, label %if.then2, label %if.else4 2147483647
+  br label %if.end6 2147483647
+  br label %if.end6 2147483647
+  %sub7 = sub nsw i32 %b.0, 1 -2147483648
+  br label %do.cond 2147483647
+  %cmp8 = icmp sge i32 %sub7, 0 2147483647
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6 2147483647
+  ret void 2147483647
+-----------SSA Worklist queue---------------  %sub7 = sub nsw i32 %b.0, 1--  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ]
+Phi instruction  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ]
+Top and dest are0x19253a0 0x1924c50 0
+0x19253a0Inside Visit phi
+0x1924d80Inside Visit phi
+0x1924c50Inside Visit phi
+This is visited here  %sub7 = sub nsw i32 %b.0, 1if.end6----do.body
+Value of operand1 in visit phii32 2 2
+Value of operand2 in visit phi  %sub7 = sub nsw i32 %b.0, 1 -2147483648
+The ins to constant value is  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ]->-2147483648
+After SSA worklist ----------------------
+  %cmp = icmp ne i32 1, 2 2147483647
+  %add = add nsw i32 2, 1 3
+  %sub = sub nsw i32 2, 1 2147483647
+  %cmp1 = icmp slt i32 %z.0, 0 2147483647
+  %add3 = add nsw i32 %z.0, 1 2147483647
+  %sub5 = sub nsw i32 %z.0, 1 2
+  br i1 %cmp, label %if.then, label %if.else 2147483647
+  br label %if.end 2147483647
+  br label %if.end 2147483647
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ] 3
+  br label %do.body 2147483647
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ] -2147483648
+  br i1 %cmp1, label %if.then2, label %if.else4 2147483647
+  br label %if.end6 2147483647
+  br label %if.end6 2147483647
+  %sub7 = sub nsw i32 %b.0, 1 -2147483648
+  br label %do.cond 2147483647
+  %cmp8 = icmp sge i32 %sub7, 0 2147483647
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6 2147483647
+  ret void 2147483647
+-----------SSA Worklist queue---------------  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ]--  %sub7 = sub nsw i32 %b.0, 1
+Assignment statements destNode. Visiting expression in0x19253a0
+Inside VisitExpression
+if.end6:                                          ; preds = %if.else4, %if.then2
+  %sub7 = sub nsw i32 %b.0, 1
+  br label %do.cond
+
+  %sub7 = sub nsw i32 %b.0, 1--------val before assignment is-2147483648
+  %sub7 = sub nsw i32 %b.0, 1--------val is-2147483648
+After visit expression  %sub7 = sub nsw i32 %b.0, 1   %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ]--2147483648 i32 1-1
+Inside a non conditional instruction in visit phi
+0
+After SSA worklist ----------------------
+  %cmp = icmp ne i32 1, 2 2147483647
+  %add = add nsw i32 2, 1 3
+  %sub = sub nsw i32 2, 1 2147483647
+  %cmp1 = icmp slt i32 %z.0, 0 2147483647
+  %add3 = add nsw i32 %z.0, 1 2147483647
+  %sub5 = sub nsw i32 %z.0, 1 2
+  br i1 %cmp, label %if.then, label %if.else 2147483647
+  br label %if.end 2147483647
+  br label %if.end 2147483647
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ] 3
+  br label %do.body 2147483647
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ] -2147483648
+  br i1 %cmp1, label %if.then2, label %if.else4 2147483647
+  br label %if.end6 2147483647
+  br label %if.end6 2147483647
+  %sub7 = sub nsw i32 %b.0, 1 -2147483648
+  br label %do.cond 2147483647
+  %cmp8 = icmp sge i32 %sub7, 0 2147483647
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6 2147483647
+  ret void 2147483647
+-----------SSA Worklist queue---------------  %sub7 = sub nsw i32 %b.0, 1--  %cmp8 = icmp sge i32 %sub7, 0
+Assignment statements destNode. Visiting expression in0x1924d80
+Inside VisitExpression
+do.cond:                                          ; preds = %if.end6
+  %cmp8 = icmp sge i32 %sub7, 0
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6
+
+Condition value is2
+Adding both True and False blocks due to undefined condition.
+0
+After SSA worklist ----------------------
+  %cmp = icmp ne i32 1, 2 2147483647
+  %add = add nsw i32 2, 1 3
+  %sub = sub nsw i32 2, 1 2147483647
+  %cmp1 = icmp slt i32 %z.0, 0 2147483647
+  %add3 = add nsw i32 %z.0, 1 2147483647
+  %sub5 = sub nsw i32 %z.0, 1 2
+  br i1 %cmp, label %if.then, label %if.else 2147483647
+  br label %if.end 2147483647
+  br label %if.end 2147483647
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ] 3
+  br label %do.body 2147483647
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ] -2147483648
+  br i1 %cmp1, label %if.then2, label %if.else4 2147483647
+  br label %if.end6 2147483647
+  br label %if.end6 2147483647
+  %sub7 = sub nsw i32 %b.0, 1 -2147483648
+  br label %do.cond 2147483647
+  %cmp8 = icmp sge i32 %sub7, 0 2147483647
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6 2147483647
+  ret void 2147483647
+-----------SSA Worklist queue---------------  %sub7 = sub nsw i32 %b.0, 1--  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ]
+Phi instruction  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ]
+Top and dest are0x19253a0 0x1924c50 0
+0x19253a0Inside Visit phi
+0x1924d80Inside Visit phi
+0x1924c50Inside Visit phi
+This is visited here  %sub7 = sub nsw i32 %b.0, 1if.end6----do.body
+Value of operand1 in visit phii32 2 2
+Value of operand2 in visit phi  %sub7 = sub nsw i32 %b.0, 1 -2147483648
+The ins to constant value is  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ]->-2147483648
+After SSA worklist ----------------------
+  %cmp = icmp ne i32 1, 2 2147483647
+  %add = add nsw i32 2, 1 3
+  %sub = sub nsw i32 2, 1 2147483647
+  %cmp1 = icmp slt i32 %z.0, 0 2147483647
+  %add3 = add nsw i32 %z.0, 1 2147483647
+  %sub5 = sub nsw i32 %z.0, 1 2
+  br i1 %cmp, label %if.then, label %if.else 2147483647
+  br label %if.end 2147483647
+  br label %if.end 2147483647
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ] 3
+  br label %do.body 2147483647
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ] -2147483648
+  br i1 %cmp1, label %if.then2, label %if.else4 2147483647
+  br label %if.end6 2147483647
+  br label %if.end6 2147483647
+  %sub7 = sub nsw i32 %b.0, 1 -2147483648
+  br label %do.cond 2147483647
+  %cmp8 = icmp sge i32 %sub7, 0 2147483647
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6 2147483647
+  ret void 2147483647
+-----------FLow Worklist queue---------------if.else4 if.end6
+After Flow worklist ----------------------
+  %cmp = icmp ne i32 1, 2 2147483647
+  %add = add nsw i32 2, 1 3
+  %sub = sub nsw i32 2, 1 2147483647
+  %cmp1 = icmp slt i32 %z.0, 0 2147483647
+  %add3 = add nsw i32 %z.0, 1 2147483647
+  %sub5 = sub nsw i32 %z.0, 1 2
+  br i1 %cmp, label %if.then, label %if.else 2147483647
+  br label %if.end 2147483647
+  br label %if.end 2147483647
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ] 3
+  br label %do.body 2147483647
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ] -2147483648
+  br i1 %cmp1, label %if.then2, label %if.else4 2147483647
+  br label %if.end6 2147483647
+  br label %if.end6 2147483647
+  %sub7 = sub nsw i32 %b.0, 1 -2147483648
+  br label %do.cond 2147483647
+  %cmp8 = icmp sge i32 %sub7, 0 2147483647
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6 2147483647
+  ret void 2147483647
+-----------FLow Worklist queue---------------do.body if.else4
+After Flow worklist ----------------------
+  %cmp = icmp ne i32 1, 2 2147483647
+  %add = add nsw i32 2, 1 3
+  %sub = sub nsw i32 2, 1 2147483647
+  %cmp1 = icmp slt i32 %z.0, 0 2147483647
+  %add3 = add nsw i32 %z.0, 1 2147483647
+  %sub5 = sub nsw i32 %z.0, 1 2
+  br i1 %cmp, label %if.then, label %if.else 2147483647
+  br label %if.end 2147483647
+  br label %if.end 2147483647
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ] 3
+  br label %do.body 2147483647
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ] -2147483648
+  br i1 %cmp1, label %if.then2, label %if.else4 2147483647
+  br label %if.end6 2147483647
+  br label %if.end6 2147483647
+  %sub7 = sub nsw i32 %b.0, 1 -2147483648
+  br label %do.cond 2147483647
+  %cmp8 = icmp sge i32 %sub7, 0 2147483647
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6 2147483647
+  ret void 2147483647
+-----------FLow Worklist queue---------------if.end6 do.cond
+After Flow worklist ----------------------
+  %cmp = icmp ne i32 1, 2 2147483647
+  %add = add nsw i32 2, 1 3
+  %sub = sub nsw i32 2, 1 2147483647
+  %cmp1 = icmp slt i32 %z.0, 0 2147483647
+  %add3 = add nsw i32 %z.0, 1 2147483647
+  %sub5 = sub nsw i32 %z.0, 1 2
+  br i1 %cmp, label %if.then, label %if.else 2147483647
+  br label %if.end 2147483647
+  br label %if.end 2147483647
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ] 3
+  br label %do.body 2147483647
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ] -2147483648
+  br i1 %cmp1, label %if.then2, label %if.else4 2147483647
+  br label %if.end6 2147483647
+  br label %if.end6 2147483647
+  %sub7 = sub nsw i32 %b.0, 1 -2147483648
+  br label %do.cond 2147483647
+  %cmp8 = icmp sge i32 %sub7, 0 2147483647
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6 2147483647
+  ret void 2147483647
+-----------FLow Worklist queue---------------do.cond do.body
+After Flow worklist ----------------------
+  %cmp = icmp ne i32 1, 2 2147483647
+  %add = add nsw i32 2, 1 3
+  %sub = sub nsw i32 2, 1 2147483647
+  %cmp1 = icmp slt i32 %z.0, 0 2147483647
+  %add3 = add nsw i32 %z.0, 1 2147483647
+  %sub5 = sub nsw i32 %z.0, 1 2
+  br i1 %cmp, label %if.then, label %if.else 2147483647
+  br label %if.end 2147483647
+  br label %if.end 2147483647
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ] 3
+  br label %do.body 2147483647
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ] -2147483648
+  br i1 %cmp1, label %if.then2, label %if.else4 2147483647
+  br label %if.end6 2147483647
+  br label %if.end6 2147483647
+  %sub7 = sub nsw i32 %b.0, 1 -2147483648
+  br label %do.cond 2147483647
+  %cmp8 = icmp sge i32 %sub7, 0 2147483647
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6 2147483647
+  ret void 2147483647
+-----------FLow Worklist queue---------------do.cond do.end
+Inside VisitExpression
+do.end:                                           ; preds = %do.cond
+  ret void
+
+0
+After Flow worklist ----------------------
+  %cmp = icmp ne i32 1, 2 2147483647
+  %add = add nsw i32 2, 1 3
+  %sub = sub nsw i32 2, 1 2147483647
+  %cmp1 = icmp slt i32 %z.0, 0 2147483647
+  %add3 = add nsw i32 %z.0, 1 2147483647
+  %sub5 = sub nsw i32 %z.0, 1 2
+  br i1 %cmp, label %if.then, label %if.else 2147483647
+  br label %if.end 2147483647
+  br label %if.end 2147483647
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ] 3
+  br label %do.body 2147483647
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ] -2147483648
+  br i1 %cmp1, label %if.then2, label %if.else4 2147483647
+  br label %if.end6 2147483647
+  br label %if.end6 2147483647
+  %sub7 = sub nsw i32 %b.0, 1 -2147483648
+  br label %do.cond 2147483647
+  %cmp8 = icmp sge i32 %sub7, 0 2147483647
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6 2147483647
+  ret void 2147483647
+-----------FLow Worklist queue---------------if.end6 do.cond
+After Flow worklist ----------------------
+  %cmp = icmp ne i32 1, 2 2147483647
+  %add = add nsw i32 2, 1 3
+  %sub = sub nsw i32 2, 1 2147483647
+  %cmp1 = icmp slt i32 %z.0, 0 2147483647
+  %add3 = add nsw i32 %z.0, 1 2147483647
+  %sub5 = sub nsw i32 %z.0, 1 2
+  br i1 %cmp, label %if.then, label %if.else 2147483647
+  br label %if.end 2147483647
+  br label %if.end 2147483647
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ] 3
+  br label %do.body 2147483647
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ] -2147483648
+  br i1 %cmp1, label %if.then2, label %if.else4 2147483647
+  br label %if.end6 2147483647
+  br label %if.end6 2147483647
+  %sub7 = sub nsw i32 %b.0, 1 -2147483648
+  br label %do.cond 2147483647
+  %cmp8 = icmp sge i32 %sub7, 0 2147483647
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6 2147483647
+  ret void 2147483647
+-----------FLow Worklist queue---------------do.cond do.body
+After Flow worklist ----------------------
+  %cmp = icmp ne i32 1, 2 2147483647
+  %add = add nsw i32 2, 1 3
+  %sub = sub nsw i32 2, 1 2147483647
+  %cmp1 = icmp slt i32 %z.0, 0 2147483647
+  %add3 = add nsw i32 %z.0, 1 2147483647
+  %sub5 = sub nsw i32 %z.0, 1 2
+  br i1 %cmp, label %if.then, label %if.else 2147483647
+  br label %if.end 2147483647
+  br label %if.end 2147483647
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ] 3
+  br label %do.body 2147483647
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ] -2147483648
+  br i1 %cmp1, label %if.then2, label %if.else4 2147483647
+  br label %if.end6 2147483647
+  br label %if.end6 2147483647
+  %sub7 = sub nsw i32 %b.0, 1 -2147483648
+  br label %do.cond 2147483647
+  %cmp8 = icmp sge i32 %sub7, 0 2147483647
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6 2147483647
+  ret void 2147483647
+-----------FLow Worklist queue---------------do.cond do.end
+After Flow worklist ----------------------
+  %cmp = icmp ne i32 1, 2 2147483647
+  %add = add nsw i32 2, 1 3
+  %sub = sub nsw i32 2, 1 2147483647
+  %cmp1 = icmp slt i32 %z.0, 0 2147483647
+  %add3 = add nsw i32 %z.0, 1 2147483647
+  %sub5 = sub nsw i32 %z.0, 1 2
+  br i1 %cmp, label %if.then, label %if.else 2147483647
+  br label %if.end 2147483647
+  br label %if.end 2147483647
+  %z.0 = phi i32 [ %add, %if.then ], [ %sub, %if.else ] 3
+  br label %do.body 2147483647
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ] -2147483648
+  br i1 %cmp1, label %if.then2, label %if.else4 2147483647
+  br label %if.end6 2147483647
+  br label %if.end6 2147483647
+  %sub7 = sub nsw i32 %b.0, 1 -2147483648
+  br label %do.cond 2147483647
+  %cmp8 = icmp sge i32 %sub7, 0 2147483647
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6 2147483647
+  ret void 2147483647
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+--------------entry0x1924040-----------
+  %cmp = icmp ne i32 1, 2
+  br i1 %cmp, label %if.then, label %if.else
+--------------if.then0x1924860-----------
+  br label %if.end
+--------------if.else0x19248d0-----------
+  %sub = sub nsw i32 2, 1
+  br label %if.end
+--------------if.end0x1924a70-----------
+  br label %do.body
+--------------do.body0x1924c50-----------
+  %b.0 = phi i32 [ 2, %if.end ], [ %sub7, %do.cond ]
+  %cmp1 = icmp slt i32 3, 0
+  br i1 %cmp1, label %if.then2, label %if.else4
+--------------if.then20x1924f70-----------
+  %add3 = add nsw i32 3, 1
+  br label %if.end6
+--------------if.else40x19251f0-----------
+  br label %if.end6
+--------------if.end60x19253a0-----------
+  %sub7 = sub nsw i32 %b.0, 1
+  br label %do.cond
+--------------do.cond0x1924d80-----------
+  %cmp8 = icmp sge i32 %sub7, 0
+  br i1 %cmp8, label %do.body, label %do.end, !llvm.loop !6
+--------------do.end0x19256c0-----------
+  ret void
+Printing analysis 'SSAConstantPropagation Pass' for function 'test':
+Pass::print not implemented for pass: 'SSAConstantPropagation Pass'!
